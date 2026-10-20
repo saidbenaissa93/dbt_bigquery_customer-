@@ -1,0 +1,18 @@
+# Clés de sécurité GCP (NE JAMAIS COMMIT)
+*.json
+gcp_key.json
+
+# Environnements virtuels
+venv/
+.venv/
+venv_linux/
+
+# Fichiers générés par dbt
+target/
+dbt_packages/
+logs/
+
+# Fichiers système et IDE
+.DS_Store
+.vscode/
+.idea/

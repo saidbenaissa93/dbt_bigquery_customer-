@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: stg_retail_sales
+    description: "Modèle de staging : nettoyage initial des transactions brutes."
+    columns:
+      - name: transaction_id
+        description: "Clé primaire unique de la transaction."
+        tests:
+          - unique
+          - not_null
+
+  - name: fct_sales_summary
+    description: "Table de faits agrégée par catégorie de produit et segment client."
+    columns:
+      - name: product_category
+        description: "Catégorie de produit nettoyée (ex: Electronics)."
+        tests:
+          - not_null
+
+      - name: customer_segment
+        description: "Segment client (ex: Corporate, Consumer)."
+        tests:
+          - not_null
+
+      - name: total_sales
+        description: "Somme des ventes pour le couple catégorie / segment."
