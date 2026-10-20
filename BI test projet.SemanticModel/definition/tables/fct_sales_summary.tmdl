@@ -1,0 +1,96 @@
+table fct_sales_summary
+	lineageTag: 1f7f45d7-a302-408e-8809-13c44a0c0ec3
+
+	measure 'CA Total' = SUM(fct_sales_summary[total_sales])
+		lineageTag: a6b79a9a-89f8-43de-8752-1beffe459b63
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Profit Total' = SUM(fct_sales_summary[total_profit])
+		lineageTag: 966f2df7-838b-4128-bb68-cfd190cc4fe2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Panier Moyen' = DIVIDE([CA Total], SUM(fct_sales_summary[total_transactions]), 0)
+		lineageTag: dc014ce0-6280-4f75-a8b3-9a7e852b34cb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Marge = DIVIDE([Profit Total], [CA Total], 0)
+		lineageTag: 6d1dfae6-f72e-4f91-8bf8-b3c11d3595bc
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column product_category
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: edc28063-965a-4646-b8b9-5ea6fbbf3956
+		summarizeBy: none
+		sourceColumn: product_category
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_segment
+		dataType: string
+		sourceProviderType: nvarchar(16384)
+		lineageTag: d1155e40-9754-4a61-95bc-6a832356f4ce
+		summarizeBy: none
+		sourceColumn: customer_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_sales
+		dataType: double
+		sourceProviderType: double
+		lineageTag: a09c9035-b375-4501-b99f-548edee85c80
+		summarizeBy: sum
+		sourceColumn: total_sales
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_profit
+		dataType: double
+		sourceProviderType: double
+		lineageTag: bc2a059a-5a44-4e96-a2d1-430871e8bb51
+		summarizeBy: sum
+		sourceColumn: total_profit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_transactions
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: d1823abc-1d2e-48c7-9817-f8850b13fcf3
+		summarizeBy: sum
+		sourceColumn: total_transactions
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_quantity_sold
+		dataType: int64
+		formatString: 0
+		sourceProviderType: bigint
+		lineageTag: 50d00f20-360f-4bf2-9c2f-758ce57e6394
+		summarizeBy: sum
+		sourceColumn: total_quantity_sold
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fct_sales_summary = m
+		mode: directQuery
+		source =
+				let
+				    Source = GoogleBigQuery.Database([Implementation="2.0"]),
+				    #"project-gcp-510710_Database" = Source{[Name="project-gcp-510710",Kind="Database"]}[Data],
+				    dbt_proj_Schema = #"project-gcp-510710_Database"{[Name="dbt_proj",Kind="Schema"]}[Data],
+				    fct_sales_summary_Table = dbt_proj_Schema{[Name="fct_sales_summary",Kind="Table"]}[Data]
+				in
+				    fct_sales_summary_Table
+
+	annotation PBI_ResultType = Table
+

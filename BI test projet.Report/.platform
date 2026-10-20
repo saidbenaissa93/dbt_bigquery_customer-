@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "BI test projet"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2dba750b-0c9a-4416-bd63-f7ad056f0525"
+  }
+}
